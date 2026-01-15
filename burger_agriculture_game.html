@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Burger Agriculture Quiz Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .question {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+    .choices button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 14px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #e9ecef;
+    }
+    .choices button:hover {
+      background: #dbe4ee;
+    }
+    .score {
+      margin-top: 15px;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .next {
+      margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #4caf50;
+      color: white;
+    }
+    .celebration {
+      font-size: 2rem;
+      margin-top: 30px;
+      animation: pop 1s infinite alternate;
+    }
+    @keyframes pop {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🍔 Burger Agriculture Quiz</h1>
+    <p>Answer all 15 questions correctly to unlock the celebration!</p>
+
+    <div id="question" class="question"></div>
+    <div id="choices" class="choices"></div>
+    <button id="nextBtn" class="next" style="display:none;">Next</button>
+    <div id="score" class="score"></div>
+    <div id="celebration" class="celebration"></div>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "Beef in a burger comes from which agricultural system?", a: ["Grain farming", "Livestock ranching", "Market gardening", "Aquaculture"], c: 1 },
+      { q: "Cheese is produced through which type of farming?", a: ["Dairy farming", "Plantation farming", "Fishing", "Shifting cultivation"], c: 0 },
+      { q: "The bun of a burger is mainly made from which crop?", a: ["Rice", "Corn", "Wheat", "Oats"], c: 2 },
+      { q: "Lettuce and tomatoes are examples of:", a: ["Livestock", "Market gardening", "Grain crops", "Pastoral farming"], c: 1 },
+      { q: "Which gas from cattle contributes to climate change?", a: ["Oxygen", "Methane", "Nitrogen", "Carbon monoxide"], c: 1 },
+      { q: "Which Köppen climate supports wheat farming?", a: ["Humid continental", "Tundra", "Rainforest", "Polar"], c: 0 },
+      { q: "Overgrazing can lead to:", a: ["Deforestation", "Desertification", "Flooding", "Glaciation"], c: 1 },
+      { q: "Dairy farms require large amounts of:", a: ["Sand", "Water", "Coal", "Salt"], c: 1 },
+      { q: "Market gardening usually occurs near:", a: ["Cities", "Deserts", "Oceans", "Mountains"], c: 0 },
+      { q: "Which farming method reduces soil erosion?", a: ["Monocropping", "Crop rotation", "Overgrazing", "Clear cutting"], c: 1 },
+      { q: "Beef feedlots are mainly used to:", a: ["Grow crops", "Fatten cattle", "Harvest grain", "Catch fish"], c: 1 },
+      { q: "Which crop is commonly used to feed cattle?", a: ["Corn", "Apples", "Potatoes", "Lettuce"], c: 0 },
+      { q: "Tomatoes grow best in which climate?", a: ["Mediterranean", "Polar", "Tundra", "Ice cap"], c: 0 },
+      { q: "Which issue is linked to fertilizer runoff?", a: ["Eutrophication", "Earthquakes", "Volcanoes", "Avalanches"], c: 0 },
+      { q: "Sustainable farming focuses on:", a: ["Short-term profit", "Long-term environmental health", "Overuse of land", "Maximum chemicals"], c: 1 }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    const qEl = document.getElementById("question");
+    const cEl = document.getElementById("choices");
+    const sEl = document.getElementById("score");
+    const nBtn = document.getElementById("nextBtn");
+    const celeb = document.getElementById("celebration");
+
+    function loadQuestion() {
+      nBtn.style.display = "none";
+      cEl.innerHTML = "";
+      qEl.textContent = questions[current].q;
+      questions[current].a.forEach((choice, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.onclick = () => selectAnswer(i);
+        cEl.appendChild(btn);
+      });
+      sEl.textContent = `Score: ${score}`;
+    }
+
+    function selectAnswer(i) {
+      if (i === questions[current].c) score++;
+      nBtn.style.display = "inline-block";
+    }
+
+    nBtn.onclick = () => {
+      current++;
+      if (current < questions.length) loadQuestion();
+      else endGame();
+    };
+
+    function endGame() {
+      qEl.textContent = "Game Over!";
+      cEl.innerHTML = "";
+      nBtn.style.display = "none";
+      sEl.textContent = `Final Score: ${score} / ${questions.length}`;
+
+      if (score === questions.length) {
+        celeb.innerHTML = "🎉🍔 PERFECT SCORE! 🍔🎉<br>You are an Agriculture Burger Master! 🏆";
+      }
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
